@@ -1,7 +1,7 @@
 {
     "sketch": "MMBC_Waterslide_Timer.ino",
-    "configuration": "usbstack=arduino,debug=off",
-    "board": "Seeeduino:samd:seeed_XIAO_m0",
+    "configuration": "cpu=atmega328",
+    "board": "arduino:avr:nano",
     "port": "COM8",
     "output": "build"
-  }
+}

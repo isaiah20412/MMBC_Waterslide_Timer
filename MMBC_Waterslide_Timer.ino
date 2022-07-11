@@ -5,6 +5,7 @@ int resetButton = 2;
 int startLaser = 0;
 int stopLaser = 1;
 int readyLED = 3;
+int startTriggerValue;
 
 /*
   Some currently unneccessary integers - they were for the buttons that I tested this with at home
@@ -82,18 +83,39 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  startTriggerValue = Sensor_Sample(startLaser);
+  Serial.println(startTriggerValue);
   checkStart();
   checkStop();
   displayTime();
 }
 
 
+int Sensor_Sample(int sPin) {
+  sampleStart = millis();
+  int numSamples = 0;
+  int sampleValue = 0;
+  int i;
+  unsigned long currentMillis = millis();
+
+  for (i = 0; i < 5; i++) {
+    sampleValue = sampleValue + analogRead(sPin);
+  }
+  
+  sampleValue = sampleValue / 5;    // average
+  sampleValue = sampleValue / 4;    // scale to 8 bits (0 - 255)
+  return sampleValue;
+}
+
+/*
 void Sensor_Sample() {
   sampleStart = millis();
   int numSamples = 0;
   unsigned long currentMillis = millis();
 
+  
 }
+*/
 
 void checkStart() {
   if (digitalRead(resetButton) == HIGH && r == false) {

@@ -23,6 +23,9 @@ bool RTG = true; // Variable for whether or not the system has been reset and is
 unsigned long start; // Start time (in milliseconds - based off the Arduino's internal clock, running since power on)
 unsigned long finish; // End time (in milliseconds - based off the Arduino's internal clock, running since power on)
 unsigned long elapsed; // How much time (in milliseconds) has actually gone by for the duration of the run.
+unsigned long sampleStart; // Time when samples start to be taken.
+unsigned long sampleStop; // Time when samples should stop being taken.
+unsigned long sampleInterval = 500; // Delay between each sample (Should usually be 500ms)
 
 #include <SPI.h>
 #include <Wire.h>
@@ -43,8 +46,9 @@ void setup() {
   /*
     pinMode(startButton, INPUT);
     pinMode(stopButton, INPUT);
-    Serial.begin(9600);
+ 
   */
+   Serial.begin(9600);
 
   pinMode(readyLED, OUTPUT);
 
@@ -81,6 +85,14 @@ void loop() {
   checkStart();
   checkStop();
   displayTime();
+}
+
+
+void Sensor_Sample() {
+  sampleStart = millis();
+  int numSamples = 0;
+  unsigned long currentMillis = millis();
+
 }
 
 void checkStart() {

@@ -6,6 +6,7 @@ int startLaser = 0;
 int stopLaser = 1;
 int readyLED = 3;
 int startTriggerValue;
+int stopTriggerValue;
 
 /*
   Some currently unneccessary integers - they were for the buttons that I tested this with at home
@@ -26,7 +27,8 @@ unsigned long finish; // End time (in milliseconds - based off the Arduino's int
 unsigned long elapsed; // How much time (in milliseconds) has actually gone by for the duration of the run.
 unsigned long sampleStart; // Time when samples start to be taken.
 unsigned long sampleStop; // Time when samples should stop being taken.
-unsigned long sampleInterval = 500; // Delay between each sample (Should usually be 500ms)
+const long sampleInterval = 500; // Delay between each sample (Should usually be 500ms)
+unsigned long previousMillis = 0;
 
 #include <SPI.h>
 #include <Wire.h>
@@ -49,7 +51,7 @@ void setup() {
     pinMode(stopButton, INPUT);
  
   */
-   Serial.begin(9600);
+   Serial.begin(115200);
 
   pinMode(readyLED, OUTPUT);
 
@@ -77,45 +79,40 @@ void setup() {
   display.print("0:00:00");
   display.display();
   digitalWrite(readyLED, HIGH);
+
+  startTriggerValue = Sensor_Sample(startLaser);
+  stopTriggerValue = Sensor_Sample(stopLaser);
 }
 
 //Section #3: Main program.
 
 void loop() {
   // put your main code here, to run repeatedly:
-  startTriggerValue = Sensor_Sample(startLaser);
-  Serial.println(startTriggerValue);
   checkStart();
   checkStop();
   displayTime();
 }
 
-
+//Function Declarations
 int Sensor_Sample(int sPin) {
   sampleStart = millis();
   int numSamples = 0;
   int sampleValue = 0;
-  int i;
-  unsigned long currentMillis = millis();
-
-  for (i = 0; i < 5; i++) {
-    sampleValue = sampleValue + analogRead(sPin);
-  }
+    
+  for (int i = 0; i < 10;) {
+    unsigned long currentMillis = millis();
+    if (currentMillis - previousMillis >= sampleInterval) {
+      previousMillis = currentMillis;
+      sampleValue = sampleValue + analogRead(sPin);
+      Serial.println(i);
+      i ++;
+      }
+    } 
   
-  sampleValue = sampleValue / 5;    // average
+  sampleValue = sampleValue / 10;    // average
   sampleValue = sampleValue / 4;    // scale to 8 bits (0 - 255)
   return sampleValue;
 }
-
-/*
-void Sensor_Sample() {
-  sampleStart = millis();
-  int numSamples = 0;
-  unsigned long currentMillis = millis();
-
-  
-}
-*/
 
 void checkStart() {
   if (digitalRead(resetButton) == HIGH && r == false) {
@@ -134,26 +131,6 @@ void checkStart() {
     start = millis();
     digitalWrite(readyLED, LOW);
   }
-
-  /*
-    startButtonState = digitalRead(startButton);
-
-    // compare the startButtonState to its previous state
-    if (startButtonState != lastStartButtonState) {
-    // if the state has changed and timer is not running, start the timer
-    if (startButtonState == HIGH && r == false) {
-      // if the current state is HIGH then the button went from off to on:
-      r = true;
-      start = millis();
-      //Serial.println(r);
-      Serial.println("timer started");
-    }
-    }
-    else if (r == true) {
-    // if the current state is LOW then the button went from on to off:
-    Serial.println("Timer running");
-    }
-  */
 }
 
 void checkStop() {

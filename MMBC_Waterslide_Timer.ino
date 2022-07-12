@@ -137,32 +137,13 @@ void checkStart() {
 
 void checkStop() {
 
+  int stopThreshold = stopTriggerValue + 100;
+
   if (analogRead(stopLaser) > 350 && r == true) {
     r = false;
     finish = millis();
     showTime = true;
   }
-  /*
-      stopButtonState = digitalRead(stopButton);
-
-      // compare the startButtonState to its previous state
-      if (stopButtonState != lastStopButtonState) {
-      // if the state has changed and timer is not running, start the timer
-      if (stopButtonState == HIGH && r == true) {
-        // if the current state is HIGH then the button went from off to on:
-        r = false;
-        finish = millis();
-        //Serial.println(r);
-        //Serial.println("timer stopped");
-        showTime = true;
-      }
-
-        else {
-        // if the current state is LOW then the button went from on to off:
-        //Serial.println("Timer is not running");
-        }
-    }
-  */
 }
 
 void displayTime() {

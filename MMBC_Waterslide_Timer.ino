@@ -104,7 +104,7 @@ int Sensor_Sample(int sPin) {
     if (currentMillis - previousMillis >= sampleInterval) {
       previousMillis = currentMillis;
       sampleValue = sampleValue + analogRead(sPin);
-      Serial.println(i);
+      //Serial.println(i);
       i ++;
       }
     } 
@@ -125,7 +125,9 @@ void checkStart() {
     digitalWrite(readyLED, HIGH);
   }
 
-  if (analogRead(startLaser) > 325 && r == false && RTG == true) {
+  int startThreshold = startTriggerValue + 100;
+  
+  if (analogRead(startLaser) > startThreshold && r == false && RTG == true) {
     r = true;
     RTG = false;
     start = millis();

@@ -55,6 +55,7 @@ void setup() {
 
   pinMode(readyLED, OUTPUT);
 
+  // Initialize Display
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display.clearDisplay();
   display.setTextSize(3); // Draw 2X-scale text
@@ -62,15 +63,35 @@ void setup() {
   display.print("Hello!");
   display.display();
   delay(1000);
+
+  //Display Loading Screen
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(25, 0);
+  display.print("Please Wait");
+  display.setTextSize(1);
+  display.setCursor(11, 15);
+  display.print("Sampling Lasers");
+  display.display();
+  
+
+  // Get average laser light levels
+  startTriggerValue = Sensor_Sample(startLaser);
+  Serial.print("Start Laser Threshold: ");
+  Serial.println(startTriggerValue);
+  stopTriggerValue = Sensor_Sample(stopLaser);
+  Serial.print("Stop Laser Threshold: ");
+  Serial.println(stopTriggerValue);
+
+  // Tell the user that we're ready
   display.clearDisplay();
   display.setTextSize(2); // Draw 2X-scale text
-  display.setTextColor(WHITE);
   display.setCursor(45, 0);
   display.print("MMBC");
   display.setTextSize(1);
   display.setCursor(11, 15);
-  display.print("Waterslide ");
-  display.print("is ready");
+  display.print("Waterslide is ready");
   display.display();
   delay(1500);
   display.clearDisplay();
@@ -79,13 +100,6 @@ void setup() {
   display.print("0:00:00");
   display.display();
   digitalWrite(readyLED, HIGH);
-
-  startTriggerValue = Sensor_Sample(startLaser);
-  Serial.print("Start Laser Threshold: ");
-  Serial.println(startTriggerValue);
-  stopTriggerValue = Sensor_Sample(stopLaser);
-  Serial.print("Stop Laser Threshold: ");
-  Serial.println(stopTriggerValue);
 }
 
 //Section #3: Main program.

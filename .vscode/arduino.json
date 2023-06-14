@@ -2,6 +2,6 @@
     "sketch": "MMBC_Waterslide_Timer.ino",
     "configuration": "cpu=atmega328",
     "board": "arduino:avr:nano",
-    "port": "COM4",
+    "port": "COM5",
     "output": "build"
 }

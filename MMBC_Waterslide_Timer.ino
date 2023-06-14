@@ -81,7 +81,11 @@ void setup() {
   digitalWrite(readyLED, HIGH);
 
   startTriggerValue = Sensor_Sample(startLaser);
+  Serial.print("Start Laser Threshold: ");
+  Serial.println(startTriggerValue);
   stopTriggerValue = Sensor_Sample(stopLaser);
+  Serial.print("Stop Laser Threshold: ");
+  Serial.println(stopTriggerValue);
 }
 
 //Section #3: Main program.
@@ -110,7 +114,7 @@ int Sensor_Sample(int sPin) {
     } 
   
   sampleValue = sampleValue / 10;    // average
-  sampleValue = sampleValue / 4;    // scale to 8 bits (0 - 255)
+  //sampleValue = sampleValue / 4;    // scale to 8 bits (0 - 255)
   return sampleValue;
 }
 

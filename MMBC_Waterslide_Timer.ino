@@ -157,7 +157,7 @@ void checkStop() {
 
   int stopThreshold = stopTriggerValue + 100;
 
-  if (analogRead(stopLaser) > 350 && r == true) {
+  if (analogRead(stopLaser) > stopThreshold && r == true) {
     r = false;
     finish = millis();
     showTime = true;

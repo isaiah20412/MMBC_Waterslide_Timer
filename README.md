@@ -1,7 +1,7 @@
 # MMBC Waterslide Timer
 ## Project Writeup
 >[!Note]
-The following is an excerpt of this project's documentation, as found in the *Mountain Meadows Facilities Handbook*.
+The following is **not** a proper Readme, but an excerpt of this project's documentation as found in the *Mountain Meadows Facilities Handbook*.
 
 
 ### Summary

@@ -8,13 +8,6 @@ int readyLED = 3;
 int startTriggerValue;
 int stopTriggerValue;
 
-/*
-  Some currently unneccessary integers - they were for the buttons that I tested this with at home
-  int startButtonState = 0;
-  int lastStartButtonState = 0;
-  int stopButtonState = 0;
-  int lastStopButtonState = 0;
-*/
 
 //Booleans for the program's running
 bool r = false; // Variable for whether or not the timer is currently running.
@@ -122,13 +115,12 @@ int Sensor_Sample(int sPin) {
     if (currentMillis - previousMillis >= sampleInterval) {
       previousMillis = currentMillis;
       sampleValue = sampleValue + analogRead(sPin);
-      //Serial.println(i);
+      //Serial.println(i); //Use when debugging
       i ++;
       }
     } 
   
   sampleValue = sampleValue / 10;    // average
-  //sampleValue = sampleValue / 4;    // scale to 8 bits (0 - 255)
   return sampleValue;
 }
 
@@ -171,6 +163,7 @@ void displayTime() {
   seconds = elapsed % 1000;
   while (r == true) {
     /*
+    // For debugging only
       current = millis();
       currentTime = current - start;
       Serial.println(currentTime);
@@ -190,17 +183,7 @@ void displayTime() {
       over = over % 60000;
       s = float(over / 1000);
       ms = over % 1000;
-      /*
-        Serial.print(h, 0);
-        Serial.print(":");
-        Serial.print(m, 0);
-        Serial.print(":");
-        Serial.print(s, 0);
-        Serial.print(":");
-        Serial.print(ms, 0);
-        Serial.print("\n");
-      */
-
+      
       display.clearDisplay();
       display.setTextSize(3); // Draw 2X-scale text
       display.setTextColor(WHITE);
@@ -228,16 +211,7 @@ void displayTime() {
         over = over % 60000;
         s = float(over / 1000);
         ms = over % 1000;
-        /*
-                Serial.print(h, 0);
-                Serial.print(":");
-                Serial.print(m, 0);
-                Serial.print(":");
-                Serial.print(s, 0);
-                Serial.print(":");
-                Serial.print(ms, 0);
-                Serial.print("\n");
-        */
+        
         display.clearDisplay();
         display.setTextSize(3); // Draw 2X-scale text
         display.setTextColor(WHITE);

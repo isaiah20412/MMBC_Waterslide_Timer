@@ -2,8 +2,8 @@
 
 //Pins for various things
 int resetButton = 2;
-int startLaser = 0;
-int stopLaser = 1;
+int startSonar = 0;
+int stopSonar = 1;
 int readyLED = 3;
 int startTriggerValue;
 int stopTriggerValue;
@@ -27,18 +27,21 @@ unsigned long previousMillis = 0;
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <NewPing.h>
 
+//Screen Information
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
 
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+
 //Section #2: Setup
 
 void setup() {
   // put your setup code here, to run once:
-
+  
   /*
     pinMode(startButton, INPUT);
     pinMode(stopButton, INPUT);
@@ -69,11 +72,11 @@ void setup() {
   display.display();
   
 
-  // Get average laser light levels
-  startTriggerValue = Sensor_Sample(startLaser);
+  // Get average clear distance measurements
+  startTriggerValue = Sensor_Sample(startSonar);
   Serial.print("Start Laser Threshold: ");
   Serial.println(startTriggerValue);
-  stopTriggerValue = Sensor_Sample(stopLaser);
+  stopTriggerValue = Sensor_Sample(stopSonar);
   Serial.print("Stop Laser Threshold: ");
   Serial.println(stopTriggerValue);
 
@@ -137,7 +140,7 @@ void checkStart() {
 
   int startThreshold = startTriggerValue + 100;
   
-  if (analogRead(startLaser) > startThreshold && r == false && RTG == true) {
+  if (analogRead(startSonar) > startThreshold && r == false && RTG == true) {
     r = true;
     RTG = false;
     start = millis();
@@ -149,7 +152,7 @@ void checkStop() {
 
   int stopThreshold = stopTriggerValue + 100;
 
-  if (analogRead(stopLaser) > stopThreshold && r == true) {
+  if (analogRead(stopSonar) > stopThreshold && r == true) {
     r = false;
     finish = millis();
     showTime = true;

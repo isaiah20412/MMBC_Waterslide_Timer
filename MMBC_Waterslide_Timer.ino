@@ -3,9 +3,9 @@
 //Pins for various things
 int resetButton = 2;
 int startSonar = 0;
-int startSonarTrig = 2;
+int startSonarTrig = 4;
 int stopSonar = 1;
-int stopSonarTrig = 4;
+int stopSonarTrig = 5;
 int readyLED = 3;
 int startTriggerValue;
 int stopTriggerValue;

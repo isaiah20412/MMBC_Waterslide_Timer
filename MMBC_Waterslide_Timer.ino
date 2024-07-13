@@ -89,7 +89,7 @@ void setup() {
   
 
   // Get average clear distance measurements
-  startTriggerValue = Sensor_Sample(startSonar);
+  startTriggerValue = Sensor_Sample(startSonar\);
   Serial.print("Start Trigger Threshold: ");
   Serial.print(startTriggerValue, "\"");
   stopTriggerValue = Sensor_Sample(stopSonar);

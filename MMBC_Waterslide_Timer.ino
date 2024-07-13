@@ -25,6 +25,11 @@ unsigned long sampleStop; // Time when samples should stop being taken.
 const long sampleInterval = 500; // Delay between each sample (Should usually be 500ms)
 unsigned long previousMillis = 0;
 
+unsigned int pingSpeed = 50;
+unsigned long pingTimer;
+unsigned long pintTimerNext;
+
+
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -107,14 +112,22 @@ void setup() {
   display.print("0:00:00");
   display.display();
   digitalWrite(readyLED, HIGH);
+
+  // Start the sonar timer
+  pingTimer = millis();
 }
 
 //Section #3: Main program.
 
 void loop() {
   // put your main code here, to run repeatedly:
-  checkStart();
-  checkStop();
+  if (millis() >= pingTimer) {
+    checkStart();
+  }
+  
+  if (millis() >= pingTimer && r == 2) {
+    checkStop();
+  }
   displayTime();
 }
 
@@ -151,7 +164,7 @@ void checkStart() {
 
   int startThreshold = startTriggerValue - 25;
   
-  if (analogRead(startSonar) < startThreshold && r == false && RTG == true) {
+  if (sonar[startSonar].ping_cm() < startThreshold && r == false && RTG == true) {
     r = true;
     RTG = false;
     start = millis();
@@ -163,7 +176,7 @@ void checkStop() {
 
   int stopThreshold = stopTriggerValue - 25;
 
-  if (analogRead(stopSonar) < stopThreshold && r == true) {
+  if (sonar[stopSonar].ping_cm() < stopThreshold && r == true) {
     r = false;
     finish = millis();
     showTime = true;

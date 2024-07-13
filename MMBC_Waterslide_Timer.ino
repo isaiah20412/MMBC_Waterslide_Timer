@@ -3,7 +3,9 @@
 //Pins for various things
 int resetButton = 2;
 int startSonar = 0;
+int startSonarTrig = 2;
 int stopSonar = 1;
+int stopSonarTrig = 4;
 int readyLED = 3;
 int startTriggerValue;
 int stopTriggerValue;
@@ -35,6 +37,15 @@ unsigned long previousMillis = 0;
 
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+//Define Ultrasonic Sensor Information
+#define sonar_num 2 // Number of sensors.
+#define max_distance 183 // Max distance in CM to ping.
+
+NewPing sonar[sonar_num] = {
+  NewPing(startSonarTrig, startSonar, max_distance),
+  NewPing(stopSonarTrig, stopSonar, max_distance)
+};
 
 
 //Section #2: Setup
@@ -74,11 +85,11 @@ void setup() {
 
   // Get average clear distance measurements
   startTriggerValue = Sensor_Sample(startSonar);
-  Serial.print("Start Laser Threshold: ");
-  Serial.println(startTriggerValue);
+  Serial.print("Start Trigger Threshold: ");
+  Serial.print(startTriggerValue, "\"");
   stopTriggerValue = Sensor_Sample(stopSonar);
-  Serial.print("Stop Laser Threshold: ");
-  Serial.println(stopTriggerValue);
+  Serial.print("Stop Trigger Threshold: ");
+  Serial.println(stopTriggerValue, "\"");
 
   // Tell the user that we're ready
   display.clearDisplay();
@@ -117,8 +128,8 @@ int Sensor_Sample(int sPin) {
     unsigned long currentMillis = millis();
     if (currentMillis - previousMillis >= sampleInterval) {
       previousMillis = currentMillis;
-      sampleValue = sampleValue + analogRead(sPin);
-      //Serial.println(i); //Use when debugging
+      sampleValue = sampleValue + sonar[sPin].ping_cm();
+      Serial.println(i); //Use when debugging
       i ++;
       }
     } 
@@ -138,9 +149,9 @@ void checkStart() {
     digitalWrite(readyLED, HIGH);
   }
 
-  int startThreshold = startTriggerValue + 100;
+  int startThreshold = startTriggerValue - 25;
   
-  if (analogRead(startSonar) > startThreshold && r == false && RTG == true) {
+  if (analogRead(startSonar) < startThreshold && r == false && RTG == true) {
     r = true;
     RTG = false;
     start = millis();
@@ -150,9 +161,9 @@ void checkStart() {
 
 void checkStop() {
 
-  int stopThreshold = stopTriggerValue + 100;
+  int stopThreshold = stopTriggerValue - 25;
 
-  if (analogRead(stopSonar) > stopThreshold && r == true) {
+  if (analogRead(stopSonar) < stopThreshold && r == true) {
     r = false;
     finish = millis();
     showTime = true;
